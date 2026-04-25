@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Syncthing
+Comment=Open Syncthing web UI
+Exec=firefox http://localhost:8384/
+Icon=network-server
+Terminal=false
+Categories=Network;

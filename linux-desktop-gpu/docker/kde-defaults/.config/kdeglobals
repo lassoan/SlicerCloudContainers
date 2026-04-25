@@ -1,0 +1,18 @@
+[General]
+ColorScheme=Breeze
+Name=Breeze
+font=Noto Sans,10,-1,5,50,0,0,0,0,0
+fixed=DejaVu Sans Mono,10,-1,5,50,0,0,0,0,0
+menuFont=Noto Sans,10,-1,5,50,0,0,0,0,0
+smallestReadableFont=Noto Sans,8,-1,5,50,0,0,0,0,0
+toolBarFont=Noto Sans,10,-1,5,50,0,0,0,0,0
+
+[KDE]
+AnimationDurationFactor=0.5
+LookAndFeelPackage=org.kde.breeze.desktop
+ShowDeleteCommand=false
+SingleClick=false
+widgetStyle=Breeze
+
+[Icons]
+Theme=breeze
