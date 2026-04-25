@@ -1,0 +1,30 @@
+services:
+  slicer:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: slicer-app-1
+    runtime: nvidia
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=all
+      - VNC_PASSWORD=${VNC_PASSWORD}
+      # Cloudflare named tunnel (optional — set token from Cloudflare dashboard)
+      - CLOUDFLARE_TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN:-}
+    ports:
+      - "6080:6080"  # noVNC web interface
+      - "5901:5901"  # VNC port (optional, for direct VNC viewer access)
+    volumes:
+      - slicer-home:/home/slicer
+      - ./data:/home/slicer/data    # Mount for project data
+      - /dev/shm:/dev/shm           # Shared memory for GPU
+    cap_add:
+      - SYS_PTRACE
+    shm_size: 4gb                   # Adjust based on your needs
+    stdin_open: true
+    tty: true
+    restart: unless-stopped
+
+volumes:
+  slicer-home:
+    driver: local

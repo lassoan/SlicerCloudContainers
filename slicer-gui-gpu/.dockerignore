@@ -1,0 +1,14 @@
+.git
+.gitignore
+.dockerignore
+.vscode
+*.md
+node_modules
+data/
+.env
+.env.local
+__pycache__
+*.pyc
+.pytest_cache
+.DS_Store
+*.log
