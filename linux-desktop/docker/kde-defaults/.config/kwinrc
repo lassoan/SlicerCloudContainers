@@ -1,0 +1,17 @@
+[org.kde.kdecoration2]
+ButtonsOnLeft=
+ButtonsOnRight=HF|IAX
+library=org.kde.breeze
+theme=Breeze
+
+[Effect-CoverSwitch]
+TabBox=false
+TabBoxAlternative=false
+
+[Effect-Blur]
+BlurStrength=10
+
+[Compositing]
+AnimationSpeed=3
+Enabled=false
+GLCore=false
