@@ -7,6 +7,16 @@ GREEN='\033[0;32m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
+# Use .env.local automatically when present so compose picks up local overrides.
+COMPOSE_ENV_ARGS=()
+if [[ -f .env.local ]]; then
+    COMPOSE_ENV_ARGS+=(--env-file .env.local)
+fi
+
+docker_compose() {
+    docker compose "${COMPOSE_ENV_ARGS[@]}" "$@"
+}
+
 # Help function
 show_help() {
     echo "Docker Slicer Quick Commands"
@@ -34,13 +44,13 @@ show_help() {
 # Build function
 build_image() {
     echo -e "${BLUE}Building Docker image...${NC}"
-    docker compose build
+    docker_compose build
 }
 
 # Start function
 start_container() {
     echo -e "${BLUE}Starting Slicer container...${NC}"
-    docker compose up -d
+    docker_compose up -d
     echo -e "${GREEN}✓ Container started${NC}"
     show_access_info
 }
@@ -48,14 +58,14 @@ start_container() {
 # Stop function
 stop_container() {
     echo -e "${BLUE}Stopping Slicer container...${NC}"
-    docker compose down
+    docker_compose down
     echo -e "${GREEN}✓ Container stopped${NC}"
 }
 
 # Restart function
 restart_container() {
     echo -e "${BLUE}Restarting Slicer container...${NC}"
-    docker compose restart
+    docker_compose restart
     echo -e "${GREEN}✓ Container restarted${NC}"
     show_access_info
 }
@@ -63,7 +73,7 @@ restart_container() {
 # Status function
 show_status() {
     echo -e "${BLUE}Container Status:${NC}"
-    docker compose ps
+    docker_compose ps
     echo ""
     show_access_info
 }
@@ -71,13 +81,13 @@ show_status() {
 # Logs function
 show_logs() {
     echo -e "${BLUE}Following container logs (Ctrl+C to exit):${NC}"
-    docker compose logs -f slicer
+    docker_compose logs -f slicer
 }
 
 # Shell function
 open_shell() {
     echo -e "${BLUE}Opening bash shell in container...${NC}"
-    docker compose exec slicer bash
+    docker_compose exec slicer bash
 }
 
 # Clean function
@@ -87,7 +97,7 @@ clean_all() {
     echo
     if [[ $REPLY =~ ^[Yy]$ ]]; then
         echo -e "${BLUE}Removing containers...${NC}"
-        docker compose down -v
+        docker_compose down -v
         echo -e "${BLUE}Removing image...${NC}"
         docker rmi slicer-gui-gpu:latest 2>/dev/null || true
         echo -e "${GREEN}✓ Cleanup complete${NC}"
@@ -97,7 +107,7 @@ clean_all() {
 # GPU check function
 check_gpu() {
     echo -e "${BLUE}Checking GPU and Vulkan in container...${NC}"
-    docker compose exec slicer bash -lc '
+    docker_compose exec slicer bash -lc '
         set +e
 
         echo "=== NVIDIA GPU Check ==="
@@ -137,7 +147,7 @@ check_gpu() {
 # Geometry check function
 check_geometry() {
     echo -e "${BLUE}Checking X11 geometry in container...${NC}"
-    docker compose exec slicer bash -lc '
+    docker_compose exec slicer bash -lc '
         set +e
         export DISPLAY=:1
 
@@ -178,14 +188,14 @@ open_browser() {
 # Get IP function
 get_ip() {
     echo -e "${BLUE}Container IP Address:${NC}"
-    docker compose exec slicer hostname -I
+    docker_compose exec slicer hostname -I
 }
 
 # Tunnel status function
 tunnel_status() {
     echo -e "${BLUE}Cloudflare Tunnel Status:${NC}"
-    if docker compose logs slicer 2>/dev/null | grep -q "Cloudflare Tunnel"; then
-        docker compose logs slicer 2>/dev/null | grep -i "cloudflare\|tunnel" | tail -5
+    if docker_compose logs slicer 2>/dev/null | grep -q "Cloudflare Tunnel"; then
+        docker_compose logs slicer 2>/dev/null | grep -i "cloudflare\|tunnel" | tail -5
     else
         echo "Cloudflare Tunnel not configured or no recent activity"
     fi
