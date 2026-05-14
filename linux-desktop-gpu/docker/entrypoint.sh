@@ -51,7 +51,7 @@ if [[ -n "${CF_VNC_TUNNEL_TOKEN:-}" ]]; then
   cat >> /etc/supervisor/conf.d/supervisord.conf <<EOF
 
 [program:cloudflared-vnc]
-command=/usr/local/bin/cloudflared tunnel run --token ${CF_VNC_TUNNEL_TOKEN}
+command=/usr/local/bin/cloudflared tunnel run --token ${CF_VNC_TUNNEL_TOKEN} --url http://localhost:${NOVNC_PORT}
 priority=60
 autorestart=true
 startsecs=5
@@ -65,7 +65,7 @@ if [[ -n "${CF_SSH_TUNNEL_TOKEN:-}" ]]; then
   cat >> /etc/supervisor/conf.d/supervisord.conf <<EOF
 
 [program:cloudflared-ssh]
-command=/usr/local/bin/cloudflared tunnel run --token ${CF_SSH_TUNNEL_TOKEN}
+command=/usr/local/bin/cloudflared tunnel run --token ${CF_SSH_TUNNEL_TOKEN} --url ssh://localhost:22
 priority=60
 autorestart=true
 startsecs=5
